@@ -19,3 +19,57 @@ It checks the credentials.
 - Compile and deploy the servlet in Tomcat.
 Access the form in your browser:
 http://localhost:8080/login.html
+
+login.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <form action="LoginServlet" method="post">
+        Username: <input type="text" name="username" /><br/>
+        Password: <input type="password" name="password" /><br/>
+        <input type="submit" value="Login" />
+    </form>
+</body>
+</html>
+
+login servlet.java
+  
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+public class LoginServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        if ("admin".equals(username) && "password123".equals(password)) {
+            out.println("<h2>Welcome, " + username + "!</h2>");
+        } else {
+            response.sendRedirect("login.html");
+        }
+    }
+}
+
+web.xml
+
+<web-app>
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>LoginServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+</web-app>
+
+
